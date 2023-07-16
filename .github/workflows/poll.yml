@@ -1,0 +1,20 @@
+name: Regular poll
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+jobs:
+  poll:
+    runs-on: ubuntu-latest
+    container: ghcr.io/fcobackup/fco-backup-fetcher:main
+    steps:
+      - uses: actions/checkout@master
+        with:
+          repository: fcobackup/fco-backup
+          ref: refs/heads/main
+          token: ${{ secrets.fcobackup_github_token }}
+          path: repo
+      - name: Set up git
+        run: (cd repo && git config user.name "FCO Backup" && git config user.email "ukfcobackup@gmail.com" && git config credential.helper '!f() { sleep 1; echo "username=${{ github.actor }}"; echo "password=${{ secrets.fcobackup_github_token }}"; }; f')
+      - name: Poll
+        run: /fco-backup-fetcher --local-git-repo-path=repo --chromedriver-start-command=sudo --chromedriver-start-command=-u --chromedriver-start-command=seluser --chromedriver-start-command=xvfb-run --chromedriver-start-command=chromedriver poll-feed-once
