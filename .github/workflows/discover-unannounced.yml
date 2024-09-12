@@ -17,4 +17,4 @@ jobs:
       - name: Set up git
         run: (cd repo && git config user.name "FCO Backup" && git config user.email "ukfcobackup@gmail.com" && git config credential.helper '!f() { sleep 1; echo "username=${{ github.actor }}"; echo "password=${{ secrets.fcobackup_github_token }}"; }; f')
       - name: Poll
-        run: /fco-backup-fetcher --local-git-repo-path=repo --chromedriver-start-command=sudo --chromedriver-start-command=-u --chromedriver-start-command=seluser --chromedriver-start-command=xvfb-run --chromedriver-start-command=chromedriver discover-unannounced
+        run: /fco-backup-fetcher --local-git-repo-path=repo --chromedriver-start-command=sudo --chromedriver-start-command=-u --chromedriver-start-command=seluser --chromedriver-start-command=xvfb-run --chromedriver-start-command=chromedriver --chromedriver-start-command=--port=9515 discover-unannounced
